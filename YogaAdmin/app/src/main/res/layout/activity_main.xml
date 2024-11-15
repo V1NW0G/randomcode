@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Search bar, Clear, and Update button container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
+
+        <!-- Search Bar - 65% width -->
+        <EditText
+            android:id="@+id/search_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.65"
+            android:hint="Search classes"
+            android:padding="10dp"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginEnd="8dp"/>
+
+        <!-- Clear Button - 15% width -->
+        <TextView
+            android:id="@+id/clear_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.15"
+            android:text="Clear"
+            android:gravity="center"
+            android:textColor="#007BFF"
+            android:textStyle="bold"
+            android:layout_marginEnd="8dp"/>
+
+        <!-- Update Button - 20% width -->
+        <Button
+            android:id="@+id/update_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.20"
+            android:text="Edit"/>
+    </LinearLayout>
+
+    <!-- TextView to toggle Advanced Search options (styled as clickable text) -->
+    <TextView
+        android:id="@+id/advanced_search_toggle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Advanced Search ▼"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:padding="8dp" />
+
+    <!-- Advanced Search options (Initially hidden) -->
+    <LinearLayout
+        android:id="@+id/advanced_search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:padding="8dp"
+        android:background="#f0f0f0">
+
+        <!-- Spinner for selecting day filter -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Filter by Day:"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+
+        <Spinner
+            android:id="@+id/day_filter_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"/>
+    </LinearLayout>
+
+    <!-- Action Buttons (Update, Add, Delete) - Initially Hidden -->
+    <LinearLayout
+        android:id="@+id/action_buttons_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_horizontal">
+
+        <!-- Update Button - Left -->
+        <Button
+            android:id="@+id/update_secondary_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update" />
+
+        <!-- Add Button - Middle -->
+        <Button
+            android:id="@+id/add_button_secondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Delete Button - Right -->
+        <Button
+            android:id="@+id/delete_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Delete" />
+    </LinearLayout>
+
+    <!-- Placeholder text when no courses are available -->
+    <TextView
+        android:id="@+id/no_courses_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No course details available. Click 'Add' to create a new course."
+        android:gravity="center"
+        android:visibility="visible"
+        android:textSize="16sp"
+        android:textColor="#888"/>
+
+    <!-- RecyclerView for displaying courses -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/course_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:visibility="gone"/>
+</LinearLayout>
