@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import com.yogaapplication.adminapp.models.Course;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class YogaDatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TYPE = "type";
     public static final String COLUMN_DESCRIPTION = "description";
     public static final String COLUMN_TUTOR_NAME = "tutor_name";
+    public static final String COLUMN_CLASS_ID = "class_id"; // New column for classId
 
     private static final String TABLE_CREATE =
             "CREATE TABLE " + TABLE_COURSES + " (" +
@@ -40,7 +42,8 @@ public class YogaDatabaseHelper extends SQLiteOpenHelper {
                     COLUMN_PRICE + " REAL NOT NULL, " +
                     COLUMN_TYPE + " TEXT NOT NULL, " +
                     COLUMN_DESCRIPTION + " TEXT, " +
-                    COLUMN_TUTOR_NAME + " TEXT);";
+                    COLUMN_TUTOR_NAME + " TEXT, " +
+                    COLUMN_CLASS_ID + " INTEGER NOT NULL);"; // Add classId column
 
     public YogaDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -53,13 +56,13 @@ public class YogaDatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 3) {
-            db.execSQL("ALTER TABLE " + TABLE_COURSES + " ADD COLUMN " + COLUMN_TUTOR_NAME + " TEXT;");
+        if (oldVersion < 4) {
+            db.execSQL("ALTER TABLE " + TABLE_COURSES + " ADD COLUMN " + COLUMN_CLASS_ID + " INTEGER;");
         }
     }
 
     // Helper method to get the day of the week from a date string
-    private String getDayOfWeek(String date) {
+    public String getDayOfWeek(String date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE", Locale.getDefault());
         try {
@@ -71,7 +74,7 @@ public class YogaDatabaseHelper extends SQLiteOpenHelper {
     }
 
     // Insert a new course
-    public long insertCourse(int courseId, String day, String time, int capacity, int duration, double price, String type, String description, String tutorName) {
+    public long insertCourse(int courseId, String day, String time, int capacity, int duration, double price, String type, String description, String tutorName, int classId) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
 
@@ -84,6 +87,7 @@ public class YogaDatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_TYPE, type);
         values.put(COLUMN_DESCRIPTION, description);
         values.put(COLUMN_TUTOR_NAME, tutorName);
+        values.put(COLUMN_CLASS_ID, classId); // Add classId to ContentValues
 
         long result = db.insert(TABLE_COURSES, null, values);
         db.close();
@@ -183,8 +187,9 @@ public class YogaDatabaseHelper extends SQLiteOpenHelper {
         String type = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TYPE));
         String description = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DESCRIPTION));
         String tutorName = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TUTOR_NAME));
+        int classId = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_CLASS_ID)); // Retrieve classId
 
-        return new Course(id, courseId, day, time, capacity, duration, price, type, description, tutorName);
+        return new Course(id, courseId, day, time, capacity, duration, price, type, description, tutorName, classId);
     }
 
     // Delete a specific course by its unique ID
@@ -217,6 +222,7 @@ public class YogaDatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_TYPE, course.getType());
         values.put(COLUMN_DESCRIPTION, course.getDescription());
         values.put(COLUMN_TUTOR_NAME, course.getTutorName());
+        values.put(COLUMN_CLASS_ID, course.getClassId()); // Update classId in the course
 
         int rowsUpdated = db.update(TABLE_COURSES, values, COLUMN_ID + "=?", new String[]{String.valueOf(course.getId())});
         db.close();

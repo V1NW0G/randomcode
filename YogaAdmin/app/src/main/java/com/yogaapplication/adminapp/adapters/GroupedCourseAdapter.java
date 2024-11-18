@@ -1,6 +1,7 @@
 package com.yogaapplication.adminapp.adapters;
 
 import android.content.Intent;
+import java.util.Locale;  // Add this import statement
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
@@ -13,15 +14,13 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.cardview.widget.CardView;
 import com.yogaapplication.adminapp.R;
-import com.yogaapplication.adminapp.activities.AddCourseActivity;
+import com.yogaapplication.adminapp.activities.ClassDetailActivity; // Make sure this import is correct
 import com.yogaapplication.adminapp.models.Course;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,6 +35,7 @@ public class GroupedCourseAdapter extends RecyclerView.Adapter<RecyclerView.View
     private boolean isEditMode = false;
     private final OnDeleteListener onDeleteListener;
     private OnAddClassClickListener onAddClassClickListener;
+    private OnClassClickListener onClassClickListener; // Added listener for class clicks
 
     public GroupedCourseAdapter(Map<Integer, List<Course>> groupedCourses, OnDeleteListener onDeleteListener) {
         this.groupedCourses = groupedCourses;
@@ -51,8 +51,16 @@ public class GroupedCourseAdapter extends RecyclerView.Adapter<RecyclerView.View
         void onAddClass(int courseId);
     }
 
+    public interface OnClassClickListener {
+        void onClassClick(int classId); // Method to handle class clicks and navigate
+    }
+
     public void setOnAddClassClickListener(OnAddClassClickListener listener) {
         this.onAddClassClickListener = listener;
+    }
+
+    public void setOnClassClickListener(OnClassClickListener listener) {
+        this.onClassClickListener = listener;
     }
 
     public void setEditMode(boolean isEditMode) {
@@ -152,6 +160,12 @@ public class GroupedCourseAdapter extends RecyclerView.Adapter<RecyclerView.View
                     : Color.LTGRAY;
 
             setCardBorderColor(itemHolder.cardView, borderColor);
+
+            itemHolder.itemView.setOnClickListener(v -> {
+                if (onClassClickListener != null) {
+                    onClassClickListener.onClassClick(course.getClassId()); // Use getClassId() instead of getCourseId()
+                }
+            });
 
             itemHolder.itemView.setOnLongClickListener(v -> {
                 onDeleteListener.onDeleteCourse(course);

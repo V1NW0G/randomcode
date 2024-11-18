@@ -124,8 +124,11 @@ public class AddCourseActivity extends AppCompatActivity {
         int duration = Integer.parseInt(durationStr);
         double price = Double.parseDouble(priceStr);
 
+        // Generate classId, it can be any logic you choose
+        int classId = generateClassId(courseId);  // This method should return an appropriate classId
+
         // Insert data into the database
-        long result = dbHelper.insertCourse(courseId, date, time, capacity, duration, price, type, description, tutorName);
+        long result = dbHelper.insertCourse(courseId, date, time, capacity, duration, price, type, description, tutorName, classId);
 
         if (result != -1) {
             Toast.makeText(this, "Course added successfully!", Toast.LENGTH_SHORT).show();
@@ -135,5 +138,12 @@ public class AddCourseActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Failed to add course. Please try again.", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    // Example of generating classId
+    private int generateClassId(int courseId) {
+        // You can generate classId based on your logic
+        // For simplicity, we can use the courseId or generate it differently.
+        return courseId + 1000; // Example: classId could be a combination of courseId
     }
 }

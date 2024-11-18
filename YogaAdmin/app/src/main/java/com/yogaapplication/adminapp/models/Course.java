@@ -14,9 +14,10 @@ public class Course implements Parcelable {
     private String type;
     private String description;
     private String tutorName;
+    private int classId; // Added field for classId
 
-    // Constructor with all parameters, including tutorName
-    public Course(int id, int courseId, String day, String time, int capacity, int duration, double price, String type, String description, String tutorName) {
+    // Constructor with all parameters, including tutorName and classId
+    public Course(int id, int courseId, String day, String time, int capacity, int duration, double price, String type, String description, String tutorName, int classId) {
         this.id = id;
         this.courseId = courseId;
         this.day = day;
@@ -27,6 +28,7 @@ public class Course implements Parcelable {
         this.type = type;
         this.description = description;
         this.tutorName = tutorName;
+        this.classId = classId; // Set classId
     }
 
     // Parcelable constructor
@@ -41,6 +43,7 @@ public class Course implements Parcelable {
         type = in.readString();
         description = in.readString();
         tutorName = in.readString();
+        classId = in.readInt(); // Read classId from parcel
     }
 
     public static final Creator<Course> CREATOR = new Creator<Course>() {
@@ -73,6 +76,7 @@ public class Course implements Parcelable {
         parcel.writeString(type);
         parcel.writeString(description);
         parcel.writeString(tutorName);
+        parcel.writeInt(classId); // Write classId to parcel
     }
 
     // Getters and Setters
@@ -154,5 +158,14 @@ public class Course implements Parcelable {
 
     public void setTutorName(String tutorName) {
         this.tutorName = tutorName;
+    }
+
+    // Getter and Setter for classId
+    public int getClassId() {
+        return classId;
+    }
+
+    public void setClassId(int classId) {
+        this.classId = classId;
     }
 }

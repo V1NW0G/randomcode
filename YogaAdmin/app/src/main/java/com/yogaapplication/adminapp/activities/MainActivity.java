@@ -19,6 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.yogaapplication.adminapp.R;
 import com.yogaapplication.adminapp.adapters.GroupedCourseAdapter;
 import com.yogaapplication.adminapp.helper.YogaDatabaseHelper;
+import com.yogaapplication.adminapp.activities.AddCourseActivity;
+import com.yogaapplication.adminapp.activities.ClassDetailActivity;
+import com.yogaapplication.adminapp.activities.UpdateActivity;
 import com.yogaapplication.adminapp.models.Course;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -148,6 +151,10 @@ public class MainActivity extends AppCompatActivity implements GroupedCourseAdap
     }
 
     private void toggleEditMode() {
+        if (courseAdapter == null) {
+            // Make sure courseAdapter is initialized before toggling edit mode
+            return;
+        }
         isEditMode = !isEditMode;
         actionButtonsContainer.setVisibility(isEditMode ? View.VISIBLE : View.GONE);
         courseAdapter.setEditMode(isEditMode);
@@ -182,9 +189,9 @@ public class MainActivity extends AppCompatActivity implements GroupedCourseAdap
             courseRecyclerView.setVisibility(View.VISIBLE);
 
             Map<Integer, List<Course>> groupedCourses = groupCoursesByCourseId(courseList);
-            courseAdapter = new GroupedCourseAdapter(groupedCourses, this);
+            courseAdapter = new GroupedCourseAdapter(groupedCourses, this);  // 'this' implements OnDeleteListener
             courseAdapter.setEditMode(isEditMode);
-            courseAdapter.setOnAddClassClickListener(courseId -> navigateToAddClassWithCourseId(courseId));
+            courseAdapter.setOnClassClickListener(classId -> navigateToClassDetail(classId)); // Add class click listener
             courseRecyclerView.setAdapter(courseAdapter);
         }
     }
@@ -201,10 +208,11 @@ public class MainActivity extends AppCompatActivity implements GroupedCourseAdap
         return groupedCourses;
     }
 
-    private void navigateToAddClassWithCourseId(int courseId) {
-        Intent intent = new Intent(MainActivity.this, AddCourseActivity.class);
-        intent.putExtra("courseId", courseId);
-        startActivityForResult(intent, REQUEST_CODE_ADD_COURSE);
+    private void navigateToClassDetail(int classId) {
+        // Add your logic to navigate to class details
+        Intent intent = new Intent(MainActivity.this, ClassDetailActivity.class);
+        intent.putExtra("classId", classId);
+        startActivity(intent);
     }
 
     @Override
